@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.IServiceCollection;
+//TODO: Learn dependency injection, the above is incorrect as DI is the namespace.
 
 namespace ConsoleApplication
 {
@@ -9,11 +11,21 @@ namespace ConsoleApplication
 	{
 		public void Configure(IApplicationBuilder app)
 		{
-			app.Run(context =>
+			var routeBuilder = new RouteBuilder(app);
+			routeBuilder.MapGet("",context => context.Response.WriteAsync("Get response"));
+			routeBuilder.MapGet("hello/{name}",context => context.Response
+				.WriteAsync($"Hello, {conext.GetRouteValue("name")}"));
+
+			/*app.Run(context =>
 			{
 				var response = String.Format("ayy {0}",DateTime.Now);
 				return context.Response.WriteAsync(response);
-			});
+			});*/
+		}
+
+		public void ConfigureServices(IServiceCollection services)
+		{
+			services.AddRouting();
 		}
 	}
     public class Program
