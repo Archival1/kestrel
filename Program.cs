@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection.IServiceCollection;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 //TODO: Learn dependency injection, the above is incorrect as DI is the namespace.
 
 namespace ConsoleApplication
@@ -12,10 +13,12 @@ namespace ConsoleApplication
 		public void Configure(IApplicationBuilder app)
 		{
 			var routeBuilder = new RouteBuilder(app);
+			//Assign routes
 			routeBuilder.MapGet("",context => context.Response.WriteAsync("Get response"));
 			routeBuilder.MapGet("hello/{name}",context => context.Response
-				.WriteAsync($"Hello, {conext.GetRouteValue("name")}"));
-
+				.WriteAsync($"Hello, {context.GetRouteValue("name")}"));
+			//Set the router usage
+			app.UseRouter(routeBuilder.Build());
 			/*app.Run(context =>
 			{
 				var response = String.Format("ayy {0}",DateTime.Now);
